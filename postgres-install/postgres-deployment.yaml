@@ -26,4 +26,4 @@ spec:
           persistentVolumeClaim:
             claimName: postgres-pv-claim
       nodeSelector:
-        type: dbnode
+        type: node.db.postgres
