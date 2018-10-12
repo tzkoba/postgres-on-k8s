@@ -89,6 +89,23 @@ spec:
 #      tolerations:
 #      - key: storage-node
 #        operator: Exists
+
+  placement:
+    all:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: type
+              operator: In
+              values:
+              - node.st.rook
+#      podAffinity:
+#      podAntiAffinity:
+#      tolerations:
+#      - key: storage-node
+#        operator: Exists
+
 # The above placement information can also be specified for mon, osd, and mgr components
 #    mon:
 #    osd:
