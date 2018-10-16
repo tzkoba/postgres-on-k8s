@@ -1,16 +1,20 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
-  name: postgres-with-rook
+  name: pg-rook-sf
 spec:
+  serviceName: pg-rook
   replicas: 1
+  selector:
+    matchLabels:
+      app: pg-rook
   template:
     metadata:
       labels:
-        app: postgres
+        app: pg-rook
     spec:
       containers:
-        - name: postgres
+        - name: pg-rook
           image: postgres:10.4
           imagePullPolicy: "IfNotPresent"
           ports:
@@ -19,10 +23,10 @@ spec:
             - configMapRef:
                 name: postgres-config
           volumeMounts:
-            - mountPath: /mnt/data
-              name: postgredb
+            - mountPath: /var/lib/postgresql
+              name: pg-rook-vol
       volumes:
-        - name: postgredb
+        - name: pg-rook-vol
           persistentVolumeClaim:
             claimName: pvc-for-rooktest
       nodeSelector:
