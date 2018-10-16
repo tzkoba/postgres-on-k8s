@@ -4,26 +4,26 @@ metadata:
   name: postgres-pv-volume
   labels:
     type: local
-    app: postgres
+    app: pg-local
 spec:
   storageClassName: manual
   capacity:
-    storage: 3Gi
+    storage: 5Gi
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   hostPath:
-    path: "/mnt/data"
+    path: "/mnt/local/data"
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: postgres-pv-claim
   labels:
-    app: postgres
+    app: pg-local
 spec:
   storageClassName: manual
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 3Gi
+      storage: 5Gi

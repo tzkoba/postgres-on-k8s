@@ -1,16 +1,20 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
-  name: postgres
+  name: pg-local-sf
 spec:
+  serviceName: pg-local-sf
   replicas: 1
+  selector:
+    matchLabels:
+      app: pg-local
   template:
     metadata:
       labels:
-        app: postgres
+        app: pg-local
     spec:
       containers:
-        - name: postgres
+        - name: pg-local
           image: postgres:10.4
           imagePullPolicy: "IfNotPresent"
           ports:
@@ -20,9 +24,9 @@ spec:
                 name: postgres-config
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: postgredb
+              name: pg-local-vol
       volumes:
-        - name: postgredb
+        - name: pg-local-vol
           persistentVolumeClaim:
             claimName: postgres-pv-claim
       nodeSelector:
