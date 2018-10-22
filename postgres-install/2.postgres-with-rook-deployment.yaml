@@ -22,8 +22,11 @@ spec:
           envFrom:
             - configMapRef:
                 name: postgres-config
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
-            - mountPath: /var/lib/postgresql
+            - mountPath: /var/lib/postgresql/data
               name: pg-rook-vol
       volumes:
         - name: pg-rook-vol
