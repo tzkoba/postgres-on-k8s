@@ -25,6 +25,8 @@ spec:
           env:
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
+            - name: TZ
+              value: Asia/Tokyo
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: pg-rook-vol
