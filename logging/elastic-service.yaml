@@ -11,4 +11,4 @@ spec:
     app: elasticsearch
   ports:
   - protocol: TCP
-    port: 80
+    port: 9200

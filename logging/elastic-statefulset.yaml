@@ -25,15 +25,6 @@ spec:
         securityContext:
           privileged: true
       containers:
-        - image: launcher.gcr.io/google/nginx1
-          name: nginx
-          volumeMounts:
-            - name: site-conf
-              mountPath: /etc/nginx/conf.d
-            - name: site-top-html
-              mountPath: /usr/share/nginx/html
-            - name: htpasswd
-              mountPath: /etc/nginx/htpasswd
         - image: elasticsearch:5.6
           name: elasticsearch-full
           env:
@@ -64,15 +55,6 @@ spec:
           - name: storage
             mountPath: /usr/share/elasticsearch/data
       volumes:
-        - name: site-conf
-          configMap:
-            name: site-conf
-        - name: site-top-html
-          configMap:
-            name: site-top-html
-        - name: htpasswd
-          secret:
-            secretName: htpasswd
         - name: storage
           persistentVolumeClaim:
             claimName: pvc-elastic-hostpath
