@@ -2,14 +2,14 @@ kind: PersistentVolume
 apiVersion: v1
 metadata:
   name: pv-elastic-hostpath
-  namespace: elasticsearch
+  namespace: logging
   labels:
     type: local
     app: pv-elastic
 spec:
   storageClassName: manual
   capacity:
-    storage: 5Gi
+    storage: 50Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
@@ -19,7 +19,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: pvc-elastic-hostpath
-  namespace: elasticsearch
+  namespace: logging
   labels:
     app: pv-elastic
 spec:
@@ -28,5 +28,5 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi
+      storage: 50Gi
 

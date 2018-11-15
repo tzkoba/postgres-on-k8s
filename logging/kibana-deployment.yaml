@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kibana-logging
-  namespace: elasticsearch
+  namespace: logging
   labels:
     k8s-app: kibana-logging
     kubernetes.io/cluster-service: "true"
@@ -36,5 +36,5 @@ spec:
           name: ui
           protocol: TCP
       nodeSelector:
-          type: node.mon.bench
+          type: node.mon.es
 
