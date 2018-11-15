@@ -1,29 +1,32 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: postgres-pv-volume
+  name: pv-elastic-hostpath
+  namespace: logging
   labels:
     type: local
-    app: pg-local
+    app: pv-elastic
 spec:
   storageClassName: manual
   capacity:
-    storage: 5Gi
+    storage: 50Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/mnt/local/data"
+    path: "/data/elasticsearch"
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: postgres-pv-claim
+  name: pvc-elastic-hostpath
+  namespace: logging
   labels:
-    app: pg-local
+    app: pv-elastic
 spec:
   storageClassName: manual
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi
+      storage: 50Gi
+
