@@ -110,5 +110,5 @@ spec:
         securityContext:
           privileged: true
       nodeSelector:
-        type: node.st.rook
+        type: node.mon.es
 
