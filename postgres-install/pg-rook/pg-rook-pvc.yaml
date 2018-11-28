@@ -1,9 +1,9 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: pvc-for-rooktest
+  name: pvc-pg-rook-sf
   labels:
-    app: postgres
+    app: pg-rook-sf
 spec:
   storageClassName: rook-ceph-block
   accessModes:

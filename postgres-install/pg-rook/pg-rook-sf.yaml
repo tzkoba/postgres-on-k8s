@@ -3,18 +3,18 @@ kind: StatefulSet
 metadata:
   name: pg-rook-sf
 spec:
-  serviceName: pg-rook
+  serviceName: pg-rook-sf
   replicas: 1
   selector:
     matchLabels:
-      app: pg-rook
+      app: pg-rook-sf
   template:
     metadata:
       labels:
-        app: pg-rook
+        app: pg-rook-sf
     spec:
       containers:
-        - name: pg-rook
+        - name: pg-rook-sf
           image: postgres:10.4
           imagePullPolicy: "IfNotPresent"
           ports:
@@ -33,6 +33,6 @@ spec:
       volumes:
         - name: pg-rook-vol
           persistentVolumeClaim:
-            claimName: pvc-for-rooktest
+            claimName: pvc-pg-rook-sf
       nodeSelector:
         type: node.db.postgres
