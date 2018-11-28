@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pg-rook-sf
+spec:
+  serviceName: pg-rook-sf
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pg-rook-sf
+  template:
+    metadata:
+      labels:
+        app: pg-rook-sf
+    spec:
+      containers:
+        - name: pg-rook-sf
+          image: postgres:10.4
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+            - name: TZ
+              value: Asia/Tokyo
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pg-rook-vol
+      volumes:
+        - name: pg-rook-vol
+          persistentVolumeClaim:
+            claimName: pvc-pg-rook-sf
+      nodeSelector:
+        type: node.db.postgres
