@@ -109,6 +109,16 @@ spec:
         name: elasticsearch-logging-init
         securityContext:
           privileged: true
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "k8s-app"
+                    operator: In
+                    values:
+                    - elasticsearch-logging
+              topologyKey: "kubernetes.io/hostname"
       nodeSelector:
         type: node.mon.es
 
