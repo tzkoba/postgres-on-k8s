@@ -1,0 +1,51 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: pgtools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgtools
+  template:
+    metadata:
+      labels:
+        app: pgtools
+    spec:
+      containers:
+      - image: tzkoba/pgbench:0.1
+        imagePullPolicy: Always
+        name: pgbench
+        stdin: true
+        tty: true
+      - image: dpage/pgadmin4:3.3
+        imagePullPolicy: Always
+        name: pgadmin4
+        env:
+        - name: PGADMIN_DEFAULT_EMAIL
+          value: pgadmin
+        - name: PGADMIN_DEFAULT_PASSWORD
+          value: pgadmin
+        ports:
+        - containerPort: 80
+          name: 80tcp01
+          protocol: TCP
+        stdin: true
+        tty: true
+      nodeSelector:
+        type: node.mon.bench
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgadmin4-nodeport
+spec:
+  type: NodePort
+  ports:
+  - name: "http-port"
+    protocol: "TCP"
+    port: 80
+    targetPort: 80
+  selector:
+    app: pgtools

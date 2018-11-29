@@ -1,20 +1,21 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: pg-rook-sf
+  name: pg-rook-ds
 spec:
-  serviceName: pg-rook-sf
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:
-      app: pg-rook-sf
+      app: pg-rook-ds
   template:
     metadata:
       labels:
-        app: pg-rook-sf
+        app: pg-rook-ds
     spec:
       containers:
-        - name: pg-rook-sf
+        - name: pg-rook-ds
           image: postgres:10.4
           imagePullPolicy: "IfNotPresent"
           ports:
@@ -47,6 +48,6 @@ spec:
       volumes:
         - name: pg-rook-vol
           persistentVolumeClaim:
-            claimName: pvc-pg-rook-sf
+            claimName: pvc-pg-rook-ds
       nodeSelector:
         type: node.db.postgres
