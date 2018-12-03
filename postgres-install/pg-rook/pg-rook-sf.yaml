@@ -19,6 +19,16 @@ spec:
           imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 5432
+          args:
+          - -c 
+          - config_file=/etc/postgresql/postgresql.conf
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - sh
+                  - -c
+                  - chmod a+w /mnt/postgresql/xlog/
           envFrom:
             - configMapRef:
                 name: postgres-config
@@ -30,6 +40,11 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: pg-rook-vol
+            - mountPath: /mnt/postgresql/xlog
+              name: pg-rook-vol-xlog
+            - mountPath: /etc/postgresql
+              readOnly: true
+              name: postgres-conf
           livenessProbe:
               tcpSocket:
                  port: 5432
@@ -48,5 +63,14 @@ spec:
         - name: pg-rook-vol
           persistentVolumeClaim:
             claimName: pvc-pg-rook-sf
+        - name: pg-rook-vol-xlog
+          persistentVolumeClaim:
+            claimName: pvc-pg-rook-sf-xlog
+        - name: postgres-conf
+          configMap:
+            name: postgres-conf
+            items:
+              - key: postgresql.conf
+                path: postgresql.conf
       nodeSelector:
         type: node.db.postgres
