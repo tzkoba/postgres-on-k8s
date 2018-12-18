@@ -1,0 +1,130 @@
+## If true, create & use RBAC resources resp. Pod Security Policies
+##
+global:
+  rbacEnable: true
+
+alertmanager:
+  image:
+    repository: quay.io/prometheus/alertmanager
+    tag: v0.15.1
+
+  nodeSelector: 
+    type: node.mon.pro
+
+  ## Alertmanager StorageSpec for persistent data
+  ## Ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/user-guides/storage.md
+  ##
+  storageSpec: 
+    volumeClaimTemplate:
+      spec:
+        storageClassName: rook-ceph-prometheus
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 20Gi
+
+prometheus:
+  image:
+    repository: quay.io/prometheus/prometheus
+    tag: v2.3.2
+
+  nodeSelector: 
+    type: node.mon.pro
+
+  serviceMonitors: []
+    ## Name of the ServiceMonitor to create
+    ##
+    # - name: ""
+
+      ## Service label for use in assembling a job name of the form <label value>-<port>
+      ## If no label is specified, the service name is used.
+      ##
+      # jobLabel: ""
+
+      ## Label selector for services to which this ServiceMonitor applies
+      ##
+      # selector: {}
+
+      ## Namespaces from which services are selected
+      ##
+      # namespaceSelector:
+        ## Match any namespace
+        ##
+        # any: false
+
+        ## Explicit list of namespace names to select
+        ##
+        # matchNames: []
+
+      ## Endpoints of the selected service to be monitored
+      ##
+      # endpoints: []
+        ## Name of the endpoint's service port
+        ## Mutually exclusive with targetPort
+        # - port: ""
+
+        ## Name or number of the endpoint's target port
+        ## Mutually exclusive with port
+        # - targetPort: ""
+
+        ## File containing bearer token to be used when scraping targets
+        ##
+        #   bearerTokenFile: ""
+
+        ## Interval at which metrics should be scraped
+        ##
+        #   interval: 30s
+
+        ## HTTP path to scrape for metrics
+        ##
+        #   path: /metrics
+
+        ## HTTP scheme to use for scraping
+        ##
+        #   scheme: http
+
+        ## TLS configuration to use when scraping the endpoint
+        ##
+        #   tlsConfig:
+
+            ## Path to the CA file
+            ##
+            # caFile: ""
+
+            ## Path to client certificate file
+            ##
+            # certFile: ""
+
+            ## Skip certificate verification
+            ##
+            # insecureSkipVerify: false
+
+            ## Path to client key file
+            ##
+            # keyFile: ""
+
+            ## Server name used to verify host name
+            ##
+            # serverName: ""
+
+  ## Prometheus StorageSpec for persistent data
+  ## Ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/user-guides/storage.md
+  ##
+  storageSpec: 
+    volumeClaimTemplate:
+      spec:
+        storageClassName: rook-ceph-prometheus
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 20Gi
+
+grafana:
+  image:
+    repository: grafana/grafana
+    tag: 5.2.2
+  nodeSelector: 
+    type: node.mon.pro
+  auth:
+    anonymous:
+      enabled: "false"

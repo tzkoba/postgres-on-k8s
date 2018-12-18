@@ -1,0 +1,4 @@
+## Node labels for prometheus-operator pod assignment
+##
+nodeSelector: 
+        type: node.mon.pro
