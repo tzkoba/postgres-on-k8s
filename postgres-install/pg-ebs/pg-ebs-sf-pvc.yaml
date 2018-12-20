@@ -1,0 +1,29 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-pg-ebs-sf
+  labels:
+    app: pg-ebs-sf
+spec:
+  storageClassName: sc-ebs-001
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-pg-ebs-sf-xlog
+  labels:
+    app: pg-ebs-sf
+spec:
+  storageClassName: sc-ebs-001
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
