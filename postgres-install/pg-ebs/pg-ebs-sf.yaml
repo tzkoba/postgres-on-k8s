@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pg-ebs-sf
+spec:
+  serviceName: pg-ebs-sf
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pg-ebs-sf
+  template:
+    metadata:
+      labels:
+        app: pg-ebs-sf
+    spec:
+      containers:
+        - name: pg-ebs-sf
+          image: postgres:10.4
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          args:
+          - -c 
+          - config_file=/etc/postgresql/postgresql.conf
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - sh
+                  - -c
+                  - chmod a+w /mnt/postgresql/xlog/
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+            - name: TZ
+              value: Asia/Tokyo
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pg-ebs-vol
+            - mountPath: /mnt/postgresql/xlog
+              name: pg-ebs-vol-xlog
+            - mountPath: /etc/postgresql
+              readOnly: true
+              name: postgres-conf
+          livenessProbe:
+              tcpSocket:
+                 port: 5432
+              initialDelaySeconds: 10
+              periodSeconds: 3
+              timeoutSeconds: 3
+              failureThreshold: 2
+          readinessProbe:
+              tcpSocket:
+                 port: 5432
+              initialDelaySeconds: 5
+              periodSeconds: 3
+              timeoutSeconds: 1
+              successThreshold: 1
+      volumes:
+        - name: pg-ebs-vol
+          persistentVolumeClaim:
+            claimName: pvc-pg-ebs-sf
+        - name: pg-ebs-vol-xlog
+          persistentVolumeClaim:
+            claimName: pvc-pg-ebs-sf-xlog
+        - name: postgres-conf
+          configMap:
+            name: postgres-conf
+            items:
+              - key: postgresql.conf
+                path: postgresql.conf
+      nodeSelector:
+        type: node.db.postgres
