@@ -2,11 +2,10 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: pg-rook-ceph-mgr
-  namespace: monitoring
+  namespace: rook-ceph
   labels:
     prometheus: pg
     app: rook-ceph-mgr
-    component: rook-ceph-mgr
 spec:
   namespaceSelector:
     matchNames:
@@ -15,7 +14,6 @@ spec:
     matchLabels:
       app: rook-ceph-mgr
       rook_cluster: rook-ceph
-      component: rook-ceph-mgr
   endpoints:
   - port: http-metrics
     path: /metrics
