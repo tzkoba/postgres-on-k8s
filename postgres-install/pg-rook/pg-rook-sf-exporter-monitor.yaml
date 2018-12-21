@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: pg-postgres-exporter
+  namespace: rook-ceph
+  labels:
+    prometheus: pg
+    app: prometheus-postgres-exporter
+spec:
+  namespaceSelector:
+    matchNames:
+      - default
+  selector:
+    matchLabels:
+      app: prometheus-postgres-exporter
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 5s
