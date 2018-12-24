@@ -1,0 +1,60 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: pv-pg-local-sf
+  labels:
+    type: local
+    app: pg-local-sf
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/local/data"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-pg-local-sf
+  labels:
+    app: pg-local-sf
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: pv-pg-local-sf-xlog
+  labels:
+    type: local
+    app: pg-local-sf
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/local/xlog"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-pg-local-sf-xlog
+  labels:
+    app: pg-local-sf
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+

@@ -10,7 +10,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 3Gi
+      storage: 60Gi
 
 ---
 kind: PersistentVolumeClaim
@@ -25,5 +25,5 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 2Gi
+      storage: 60Gi
 
