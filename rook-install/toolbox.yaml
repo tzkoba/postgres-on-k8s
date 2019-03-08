@@ -1,11 +1,12 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: rook-ceph-tools
   namespace: rook-ceph
   labels:
     app: rook-ceph-tools
 spec:
+  serviceName: rook-ceph-tools
   replicas: 1
   selector:
     matchLabels:
