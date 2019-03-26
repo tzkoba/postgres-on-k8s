@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-nginx
+  template:
+    metadata:
+      labels:
+        app: sample-nginx
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: "/mnt/disk"
+          name: mydata
+      nodeSelector:
+        type: node.st.lnst.flex
+      volumes:
+      - name: mydata
+        persistentVolumeClaim:
+          claimName: pvc-localvolume
