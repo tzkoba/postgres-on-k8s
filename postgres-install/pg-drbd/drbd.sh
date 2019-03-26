@@ -1,12 +1,5 @@
 #!/bin/bash
 
-#Old Driver invocation model:
-#Init: <driver executable> init
-#Attach: <driver executable> attach <json options>
-#Detach: <driver executable> detach <mount device>
-#Mount: <driver executable> mount <target mount dir> <mount device> <json options>
-#Unmount: <driver executable> unmount <mount dir>
-
 # Driver invocation model:
 # init
 # getvolumename <json:"volumeName,omitempty">
@@ -158,8 +151,6 @@ case "$op" in
 		unmount $*
 		;;
 	isattached)
-		err "{\"status\": \"Failed\",\"message\": \"op:isattached $# $*\"}"
-		exit 1
 		ismounted $*
 		;;
 	getvolumename)
