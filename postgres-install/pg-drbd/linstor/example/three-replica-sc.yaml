@@ -1,0 +1,9 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: two-replica
+provisioner: io.drbd.linstor-csi
+parameters:
+  autoPlace: "2"
+  storagePool: "pool0"
+  filesystem: "xfs"

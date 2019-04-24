@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pg-drbd-sf
+spec:
+  serviceName: pg-drbd-sf
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pg-drbd-sf
+  template:
+    metadata:
+      labels:
+        app: pg-drbd-sf
+    spec:
+      containers:
+        - name: pg-drbd-sf
+          image: postgres:10.4
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          args:
+          - -c 
+          - config_file=/etc/postgresql/postgresql.conf
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - sh
+                  - -c
+                  - chmod a+w /mnt/postgresql/xlog/
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+            - name: TZ
+              value: Asia/Tokyo
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pg-drbd-vol
+            - mountPath: /mnt/postgresql/xlog
+              name: pg-drbd-vol-xlog
+            - mountPath: /etc/postgresql
+              readOnly: true
+              name: postgres-conf
+          livenessProbe:
+              tcpSocket:
+                 port: 5432
+              initialDelaySeconds: 10
+              periodSeconds: 3
+              timeoutSeconds: 3
+              failureThreshold: 2
+          readinessProbe:
+              tcpSocket:
+                 port: 5432
+              initialDelaySeconds: 5
+              periodSeconds: 3
+              timeoutSeconds: 1
+              successThreshold: 1
+      volumes:
+        - name: pg-drbd-vol
+          persistentVolumeClaim:
+            claimName: pvc-linstor-csi-3r
+        - name: pg-drbd-vol-xlog
+          persistentVolumeClaim:
+            claimName: pvc-linstor-csi-3r-arch
+        - name: postgres-conf
+          configMap:
+            name: postgres-conf
+            items:
+              - key: postgresql.conf
+                path: postgresql.conf
+      nodeSelector:
+        node-type: db.postgres.drbd
