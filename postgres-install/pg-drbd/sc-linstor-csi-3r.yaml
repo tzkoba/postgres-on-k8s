@@ -1,0 +1,9 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: sc-linstor-csi-3r
+provisioner: io.drbd.linstor-csi
+parameters:
+  autoPlace: "3"
+  storagePool: "pool0"
+  filesystem: "xfs"
