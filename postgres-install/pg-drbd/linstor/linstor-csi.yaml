@@ -127,6 +127,8 @@ spec:
       volumes:
         - name: socket-dir
           emptyDir: {}
+      nodeSelector:
+        linstor-node: controller
 ---
 
 kind: ServiceAccount
@@ -329,6 +331,8 @@ spec:
         - name: device-dir
           hostPath:
             path: /dev
+      nodeSelector:
+        linstor-node: satellite
 ---
 
 apiVersion: v1
