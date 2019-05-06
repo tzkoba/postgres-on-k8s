@@ -62,10 +62,10 @@ spec:
       volumes:
         - name: pg-drbd-vol
           persistentVolumeClaim:
-            claimName: pvc-linstor-csi-3r
+            claimName: pvc-linstor-csi-2r
         - name: pg-drbd-vol-xlog
           persistentVolumeClaim:
-            claimName: pvc-linstor-csi-3r-arch
+            claimName: pvc-linstor-csi-2r-xlog
         - name: postgres-conf
           configMap:
             name: postgres-conf
