@@ -1,11 +1,11 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: pvc-linstor-csi-3r
+  name: pvc-linstor-csi-2r-xlog
 spec:
-  storageClassName: sc-linstor-csi-3r
+  storageClassName: sc-linstor-csi-2r
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 8Gi
+      storage: 2Gi
