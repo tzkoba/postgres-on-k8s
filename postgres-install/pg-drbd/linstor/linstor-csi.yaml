@@ -128,7 +128,7 @@ spec:
         - name: socket-dir
           emptyDir: {}
       nodeSelector:
-        linstor-node: controller
+        linstor: controller
 ---
 
 kind: ServiceAccount
@@ -332,7 +332,7 @@ spec:
           hostPath:
             path: /dev
       nodeSelector:
-        linstor-node: satellite
+        linstor: satellite
 ---
 
 apiVersion: v1
