@@ -59,4 +59,4 @@ spec:
             - key: data
               path: mon-endpoints
       nodeSelector:
-        type: node.mon.bench
+        rook: ceph.csi

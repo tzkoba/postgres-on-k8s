@@ -33,8 +33,7 @@ spec:
         stdin: true
         tty: true
       nodeSelector:
-        type: node.mon.bench
-
+        mon: pgtools
 ---
 apiVersion: v1
 kind: Service

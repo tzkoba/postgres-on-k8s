@@ -5,12 +5,12 @@ metadata:
   labels:
     app: pg-rook-sf
 spec:
-  storageClassName: rook-ceph-block
+  storageClassName: csi-rbd
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 8Gi
 
 ---
 kind: PersistentVolumeClaim
@@ -20,10 +20,10 @@ metadata:
   labels:
     app: pg-rook-sf
 spec:
-  storageClassName: rook-ceph-block
+  storageClassName: csi-rbd
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi
+      storage: 2Gi
 

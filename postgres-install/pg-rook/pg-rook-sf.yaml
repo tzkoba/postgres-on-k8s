@@ -73,4 +73,4 @@ spec:
               - key: postgresql.conf
                 path: postgresql.conf
       nodeSelector:
-        type: node.db.postgres
+        db-node: pg-rook

@@ -73,4 +73,4 @@ spec:
               - key: postgresql.conf
                 path: postgresql.conf
       nodeSelector:
-        node-type: db.postgres.drbd
+        db-node: pg-drbd
