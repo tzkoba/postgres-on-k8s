@@ -1,0 +1,11 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-stolon-local
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: sc-stolon-local
+  resources:
+    requests:
+      storage: 5Gi
