@@ -73,19 +73,19 @@ spec:
         - name: stolon
           secret:
             secretName: stolon
-        - name: data
-          persistentVolumeClaim:
-            claimName: pvc-stolon-local
+#        - name: data
+#          persistentVolumeClaim:
+#            claimName: pvc-stolon-local
       nodeSelector:
         db-node: stolon
   # Define your own volumeClaimTemplate. This example uses dynamic PV provisioning with a storage class named "standard" (so it will works by default with minikube)
   # In production you should use your own defined storage-class and configure your persistent volumes (statically or dynamically using a provisioner, see related k8s doc).
-#  volumeClaimTemplates:
-#  - metadata:
-#      name: data
-#    spec:
-#      accessModes:  [ "ReadWriteOnce" ]
-#      storageClassName: "sc-stolon-local"
-#      resources:
-#        requests:
-#          storage: 5Gi
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes:  [ "ReadWriteOnce" ]
+      storageClassName: "sc-stolon-local"
+      resources:
+        requests:
+          storage: 5Gi
