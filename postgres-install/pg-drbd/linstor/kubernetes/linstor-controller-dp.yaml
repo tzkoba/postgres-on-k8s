@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linstor-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: linstor-controller
+  template:
+    metadata:
+      labels:
+        app: linstor-controller
+    spec:
+      containers:
+        - name: linstor-controller
+          image: drbd.io/linstor-controller
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 3376
+            - containerPort: 3377
+      imagePullSecrets:
+      - name: regcred
+      nodeSelector:
+        linstor-controller: "true"

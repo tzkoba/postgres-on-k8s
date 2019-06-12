@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: drbd-module-load
+spec:
+  backoffLimit: 4
+  template:
+    metadata:
+      name: drbd-module-load
+    spec:
+      containers:
+      - name: drbd9
+        image: drbd.io/drbd9:rhel7
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /lib/modules
+          name: lib-modules
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Never
+      volumes:
+      - hostPath:
+          path: /lib/modules
+        name: lib-modules
+      nodeSelector:
+        db-node: pg-rook
+

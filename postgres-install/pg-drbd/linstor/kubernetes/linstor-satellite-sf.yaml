@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: linstor-satellite
+spec:
+  serviceName: linstor-satellite
+  replicas: 2
+  selector:
+    matchLabels:
+      app: linstor-satellite
+  template:
+    metadata:
+      labels:
+        app: linstor-satellite
+    spec:
+      initContainers:
+      - name: drbd9
+        image: drbd.io/drbd9:rhel7
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /lib/modules
+          name: lib-modules
+      containers:
+        - name: linstor-satellite
+          image: drbd.io/linstor-satellite
+          securityContext:
+            privileged: true
+          imagePullPolicy: "IfNotPresent"
+      imagePullSecrets:
+      - name: regcred
+      volumes:
+      - hostPath:
+          path: /lib/modules
+        name: lib-modules
+      nodeSelector:
+        linstor-satellite: "true"
