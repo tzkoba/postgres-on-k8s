@@ -19,7 +19,34 @@ spec:
           ports:
             - containerPort: 3376
             - containerPort: 3377
+        - name: linstor-client
+          image: drbd.io/linstor-client
+          env: 
+            - name: LS_CONTROLLERS
+              value: Controller
+          imagePullPolicy: "IfNotPresent"
+          stdin: true
+          tty: true
       imagePullSecrets:
       - name: regcred
       nodeSelector:
         linstor-controller: "true"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: linstor-controller-svc
+spec:
+  type: ClusterIP
+  ports:
+  - name: "port1"
+    protocol: "TCP"
+    port: 3376
+    targetPort: 3376
+  - name: "port2"
+    protocol: "TCP"
+    port: 3377
+    targetPort: 3377
+  selector:
+    app: linstor-controller
