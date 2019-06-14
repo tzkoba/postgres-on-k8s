@@ -1,10 +1,10 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: DaemonSet
 metadata:
   name: linstor-satellite
 spec:
-  serviceName: linstor-satellite
-  replicas: 2
+#  serviceName: linstor-satellite0
+#  replicas: 1
   selector:
     matchLabels:
       app: linstor-satellite
@@ -27,6 +27,9 @@ spec:
           securityContext:
             privileged: true
           imagePullPolicy: "IfNotPresent"
+          ports:
+          - containerPort: 3366
+          - containerPort: 3367
       imagePullSecrets:
       - name: regcred
       volumes:
@@ -35,3 +38,25 @@ spec:
         name: lib-modules
       nodeSelector:
         linstor-satellite: "true"
+      hostNetwork: true
+
+---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: linstor-satellite0
+#spec:
+#  type: ClusterIP
+#  clusterIP: None
+#  ports:
+#  - port: 7000
+#    name: port1
+#    protocol: TCP
+#    targetPort: 7000
+#  - port: 7001
+#    name: port2
+#    protocol: TCP
+#    targetPort: 7001
+#  selector:
+#    app: linstor-satellite0
+

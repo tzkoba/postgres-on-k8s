@@ -1,8 +1,22 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-linstor-controller
+spec:
+  storageClassName: standard
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: linstor-controller
 spec:
+  serviceName: linstor-controller
   replicas: 1
   selector:
     matchLabels:
@@ -19,16 +33,25 @@ spec:
           ports:
             - containerPort: 3376
             - containerPort: 3377
+          volumeMounts:
+          - mountPath: /var/lib/linstor
+            name: lib-linstor
         - name: linstor-client
           image: drbd.io/linstor-client
           env: 
             - name: LS_CONTROLLERS
-              value: Controller
+              value: linstor-controller-svc
           imagePullPolicy: "IfNotPresent"
           stdin: true
           tty: true
       imagePullSecrets:
       - name: regcred
+      securityContext:
+        fsGroup: 1000
+      volumes:
+      - name: lib-linstor
+        persistentVolumeClaim:
+          claimName: pvc-linstor-controller
       nodeSelector:
         linstor-controller: "true"
 
@@ -39,6 +62,7 @@ metadata:
   name: linstor-controller-svc
 spec:
   type: ClusterIP
+  clusterIP: None
   ports:
   - name: "port1"
     protocol: "TCP"
