@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: linstor-satellite
+spec:
+#  serviceName: linstor-satellite0
+#  replicas: 1
+  selector:
+    matchLabels:
+      app: linstor-satellite
+  template:
+    metadata:
+      labels:
+        app: linstor-satellite
+    spec:
+      initContainers:
+      - name: drbd9
+        image: drbd.io/drbd9:rhel7
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /lib/modules
+          name: lib-modules
+      containers:
+        - name: linstor-satellite
+          image: drbd.io/linstor-satellite
+          securityContext:
+            privileged: true
+          imagePullPolicy: "IfNotPresent"
+          ports:
+          - containerPort: 3366
+          - containerPort: 3367
+      imagePullSecrets:
+      - name: regcred
+      volumes:
+      - hostPath:
+          path: /lib/modules
+        name: lib-modules
+      nodeSelector:
+        linstor-satellite: "true"
+      hostNetwork: true
+
+---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: linstor-satellite0
+#spec:
+#  type: ClusterIP
+#  clusterIP: None
+#  ports:
+#  - port: 7000
+#    name: port1
+#    protocol: TCP
+#    targetPort: 7000
+#  - port: 7001
+#    name: port2
+#    protocol: TCP
+#    targetPort: 7001
+#  selector:
+#    app: linstor-satellite0
+
